@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>   
+#include <cmath>
 
 //******************************************************************************************************************************
 
@@ -28,6 +29,31 @@ vector<double> add_vectors(vector<double> v1, vector<double> v2){
 }
 
 //******************************************************************************************************************************
-int main(){
 
+vector<double> multiply_scalaire(vector<double> v, double scalar) {
+    
+    //variables
+    vector<double> result(v.size());
+
+    // Multiplication de chaque élément du vecteur par le scalaire
+    for (int i = 0; i < v.size(); i++) {
+        result[i] = v[i] * scalar;
+    }
+
+    return result;
+}
+
+//******************************************************************************************************************************
+int main(){
+    vector<double> v1,v2;
+    v1.push_back(1.0);
+    v1.push_back(6.0);
+
+    v2.push_back(1.0);
+    v2.push_back(9.0);
+
+    vector<double> result = add_vectors(v1,v2);
+    for(double val : result) {
+        cout << val << " ";
+    }
 }
