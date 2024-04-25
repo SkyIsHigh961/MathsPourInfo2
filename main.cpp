@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>   
-#include <cmath>
+#include <cmath> 
 
 //******************************************************************************************************************************
 
@@ -9,7 +9,7 @@ using namespace std;
 
 //******************************************************************************************************************************
 
-vector<double> add_vectors(vector<double> v1, vector<double> v2){
+vector<double> addition(vector<double> v1, vector<double> v2){
 
     //variables
     vector<double> result(v1.size());
@@ -30,7 +30,7 @@ vector<double> add_vectors(vector<double> v1, vector<double> v2){
 
 //******************************************************************************************************************************
 
-vector<double> multiply_scalaire(vector<double> v, double scalar) {
+vector<double> multiplication_scalaire(vector<double> v, double scalar) {
     
     //variables
     vector<double> result(v.size());
@@ -44,6 +44,16 @@ vector<double> multiply_scalaire(vector<double> v, double scalar) {
 }
 
 //******************************************************************************************************************************
+
+ vector<double> produit_scalaire(vector<double> ){
+
+ }
+
+
+
+
+
+//******************************************************************************************************************************
 int main(){
     vector<double> v1,v2;
     v1.push_back(1.0);
@@ -52,7 +62,7 @@ int main(){
     v2.push_back(1.0);
     v2.push_back(9.0);
 
-    vector<double> result = add_vectors(v1,v2);
+    vector<double> result = addition(v1,v2);
     for(double val : result) {
         cout << val << " ";
     }
