@@ -65,16 +65,43 @@ vector<double> multiplication_scalaire(vector<double> v, double scalar) {
  }
 
 //******************************************************************************************************************************
-int main(){
-    vector<double> v1,v2;
-    v1.push_back(1.0);
-    v1.push_back(6.0);
 
-    v2.push_back(1.0);
-    v2.push_back(9.0);
+vector<vector<double>> transpose_matrice(const vector<vector<double>>& matrix) {
+    if (matrix.empty()) return {};
 
-    vector<double> result = addition(v1,v2);
-    for(double val : result) {
-        cout << val << " ";
+    // Create a new matrix with the dimensions swapped
+    vector<vector<double>> transposed(matrix[0].size(), vector<double>(matrix.size()));
+
+    // Fill the transposed matrix
+    for (size_t i = 0; i < matrix.size(); i++) {
+        for (size_t j = 0; j < matrix[0].size(); j++) {
+            transposed[j][i] = matrix[i][j];
+        }
     }
+
+    return transposed;
+}
+//******************************************************************************************************************************
+
+vector<double> produit_matrices(){
+    
+}
+
+//******************************************************************************************************************************
+int main(){
+    vector<vector<double>> matrix = {
+        {1, 2, 3},
+        {4, 5, 6}
+    };
+
+    vector<vector<double>> transposed = transpose_matrice(matrix);
+
+    for (const auto& row : transposed) {
+        for (double val : row) {
+            cout << val << " ";
+        }
+        cout << endl;
+    }
+
+    return 0;
 }
