@@ -110,6 +110,30 @@ vector<vector<double>> produit_matrices(const vector<vector<double>>& mat1, cons
 }
 
 //******************************************************************************************************************************
+
+vector<double> appliquer_matrice_vecteur(const vector<vector<double>>& mat, const vector<double>& vec) {
+    
+    // Vérifier si la matrice est vide ou si le nombre de colonnes de la matrice ne correspond pas à la taille du vecteur
+    if (mat.empty() || mat[0].size() != vec.size()) {
+        throw invalid_argument("Taille incompatibles entre la matrice et le vecteur");
+    }
+
+    // Initialisation du vecteur résultant
+    vector<double> result(mat.size(), 0.0);
+
+    // Boucle sur chaque ligne de la matrice
+    for (size_t i = 0; i < mat.size(); i++) {
+        // Boucle sur chaque colonne de la ligne actuelle
+        for (size_t j = 0; j < mat[i].size(); j++) {
+            // Multiplication de l'élément de la matrice par l'élément correspondant du vecteur et addition au résultat
+            result[i] += mat[i][j] * vec[j];
+        }
+    }
+
+    return result;
+}
+
+//******************************************************************************************************************************
 int main(){
     vector<vector<double>> matrix = {
         {1, 2, 3},
