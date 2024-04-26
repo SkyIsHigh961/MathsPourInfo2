@@ -65,14 +65,15 @@ vector<double> multiplication_scalaire(vector<double> v, double scalar) {
  }
 
 //******************************************************************************************************************************
+// Fonction pour transposer une matrice
 
 vector<vector<double>> transpose_matrice(const vector<vector<double>>& matrix) {
     if (matrix.empty()) return {};
 
-    // Create a new matrix with the dimensions swapped
+    // Crée une nouvelle matrice avec les dimensions inversées
     vector<vector<double>> transposed(matrix[0].size(), vector<double>(matrix.size()));
 
-    // Fill the transposed matrix
+    // Remplissage de la matrice transposée
     for (size_t i = 0; i < matrix.size(); i++) {
         for (size_t j = 0; j < matrix[0].size(); j++) {
             transposed[j][i] = matrix[i][j];
@@ -81,10 +82,31 @@ vector<vector<double>> transpose_matrice(const vector<vector<double>>& matrix) {
 
     return transposed;
 }
+
 //******************************************************************************************************************************
 
-vector<double> produit_matrices(){
+vector<vector<double>> produit_matrices(const vector<vector<double>>& mat1, const vector<vector<double>>& mat2) {
     
+    // Vérification de la compatibilité des matrices pour la multiplication
+    if (mat1.empty() || mat2.empty() || mat1[0].size() != mat2.size()) {
+        throw invalid_argument("Les matrices ne peuvent pas être multipliées en raison de tailles incompatibles");
+    }
+
+    // Initialisation de la matrice résultante avec des zéros
+    vector<vector<double>> result(mat1.size(), vector<double>(mat2[0].size(), 0));
+
+    // Boucle sur chaque ligne de mat1
+    for (size_t i = 0; i < mat1.size(); ++i) {
+        // Boucle sur chaque colonne de mat2
+        for (size_t j = 0; j < mat2[0].size(); ++j) {
+            // Calcul de l'élément [i][j] du résultat
+            for (size_t k = 0; k < mat2.size(); ++k) {
+                result[i][j] += mat1[i][k] * mat2[k][j];
+            }
+        }
+    }
+
+    return result;
 }
 
 //******************************************************************************************************************************
