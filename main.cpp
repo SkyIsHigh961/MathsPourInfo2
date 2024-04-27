@@ -2,16 +2,13 @@
 #include <string>
 #include <vector>   
 #include <cmath> 
+#include <stdexcept> //for exceptions
 
 //******************************************************************************************************************************
 
 using namespace std;
 
 //******************************************************************************************************************************
-
-
-
-
 
 vector<double> addition(vector<double> v1, vector<double> v2){
 
@@ -113,10 +110,6 @@ vector<vector<double>> produit_matrices(const vector<vector<double>>& mat1, cons
     return result;
 }
 
-
-
-
-
 //******************************************************************************************************************************
 
 vector<double> appliquer_matrice_vecteur(const vector<vector<double>>& mat, const vector<double>& vec) {
@@ -152,20 +145,58 @@ bool isValide(vector<vector<double>> matrice){
 }
 
 //******************************************************************************************************************************
+// Cette fonction réalise la décomposition de Cholesky d'une matrice symétrique définie positive
+// Précondition : La matrice en entrée doit etre définie positive sinon la fonction renvoie une erreur.
+
+vector<vector<double>> cholesky_decomposition(const vector<vector<double>>& A) {
+    size_t n = A.size();
+    vector<vector<double>> B(n, vector<double>(n, 0.0));
+
+    for (size_t j = 0; j < n; j++) {
+        double sum = 0.0;
+        for (size_t k = 0; k < j; k++) {
+            sum += B[j][k] * B[j][k];
+        }
+        double diag = A[j][j] - sum;
+        if (diag <= 0) {
+            throw std::runtime_error("La matrice n'est pas définie positive.");
+        }
+        B[j][j] = sqrt(diag);
+
+        for (size_t i = j + 1; i < n; i++) {
+            sum = 0.0;
+            for (size_t k = 0; k < j; k++) {
+                sum += B[i][k] * B[j][k];
+            }
+            B[i][j] = (A[i][j] - sum) / B[j][j];
+        }
+    }
+
+    return B;
+}
+
+
+//******************************************************************************************************************************
 int main(){
 
-    vector<vector<double>> matrix = {
-        {1, 2, 3},
-        {4, 5, 6}
+    vector<vector<double>> A = {
+        {25, 15, -5},
+        {15, 18, 0},
+        {-5, 0, 11}
     };
 
-    vector<vector<double>> transposed = transpose_matrice(matrix);
+    try {
+        vector<vector<double>> B = cholesky_decomposition(A);
 
-    for (const auto& row : transposed) {
-        for (double val : row) {
-            cout << val << " ";
+        cout << "Matrice B (resultat de la decomposition de Cholesky):" << endl;
+        for (const auto& row : B) {
+            for (double val : row) {
+                cout << val << " ";
+            }
+            cout << endl;
         }
-        cout << endl;
+    } catch (const std::exception& e) {
+        cerr << "Erreur: " << e.what() << endl;
     }
 
     return 0;
