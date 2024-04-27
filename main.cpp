@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 #include <vector>   
-#include <cmath> 
-#include <stdexcept> //for exceptions
+#include <cmath> //for additional math functions
+#include <stdexcept> //for std::invalid_argument 
 
 //******************************************************************************************************************************
 
