@@ -214,7 +214,14 @@ vector<double> substitution_arriere(const vector<vector<double>>& U, const vecto
 
 //******************************************************************************************************************************
 // Function to calculate the solution of the normal equation A^TAx = A^Tb
+
 vector<double> resoudre_equation_normale(const vector<vector<double>>& A, const vector<double>& b) {
+    
+    // Vérifiez que le nombre de lignes de A correspond à la taille de b
+    if (A.empty() || A.size() != b.size()) {
+        throw invalid_argument("La matrice et le vecteur ne sont pas compatibles pour résoudre l'équation normale.");
+    }
+    
     vector<vector<double>> At = transpose_matrice(A); // At est la transposée de A
     vector<vector<double>> AtA = produit_matrices(At, A); // AtA est le produit de At par A
     vector<double> Atb = appliquer_matrice_vecteur(At, b); // Atb est le produit de At par b
@@ -233,19 +240,28 @@ vector<double> resoudre_equation_normale(const vector<vector<double>>& A, const 
 //******************************************************************************************************************************
 int main(){
 
-// Your matrix A and vector b should be defined here
-    // Example usage:
-    // vector<vector<double>> A = {{...}, {...}, ...};
-    // vector<double> b = {...};
+// Définissons une matrice A et un vecteur b
+    vector<vector<double>> A = {
+        {2, -1, 0, 0},
+        {-1, 2, -1, 0},
+        {0, -1, 2, -1},
+        {0, 0, -1, 2}
+    };
+    vector<double> b = {1, 0, 0, 0};
 
-    // Calculate the least squares solution
-    // vector<double> x_chapeau = resoudre_equation_normale(A, b);
-
-    // Output the result
-    // for (double val : x_chapeau) {
-    //     cout << val << " ";
-    // }
-    // cout << endl;
+    // Utilisons la fonction pour calculer la solution des moindres carrés
+    try {
+        vector<double> x_chapeau = resoudre_equation_normale(A, b);
+        
+        // Affichons le résultat
+        cout << "La solution x_chapeau est:" << endl;
+        for (double val : x_chapeau) {
+            cout << val << " ";
+        }
+        cout << endl;
+    } catch (const std::exception& e) {
+        cerr << "Erreur: " << e.what() << endl;
+    }
 
     return 0;
 }
