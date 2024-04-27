@@ -237,31 +237,34 @@ vector<double> resoudre_equation_normale(const vector<vector<double>>& A, const 
     return x_chapeau;
 }
 
+//Test :
+// Définissons une matrice A et un vecteur b
+    // vector<vector<double>> A = {
+    //     {2, -1, 0, 0},
+    //     {-1, 2, -1, 0},
+    //     {0, -1, 2, -1},
+    //     {0, 0, -1, 2}
+    // };
+    // vector<double> b = {1, 0, 0, 0};
+
+    // // Utilisons la fonction pour calculer la solution des moindres carrés
+    // try {
+    //     vector<double> x_chapeau = resoudre_equation_normale(A, b);
+        
+    //     // Affichons le résultat
+    //     cout << "La solution x_chapeau est:" << endl;
+    //     for (double val : x_chapeau) {
+    //         cout << val << " ";
+    //     }
+    //     cout << endl;
+    // } catch (const std::exception& e) {
+    //     cerr << "Erreur: " << e.what() << endl;
+    // }
+
+    // return 0;
+
 //******************************************************************************************************************************
 int main(){
 
-// Définissons une matrice A et un vecteur b
-    vector<vector<double>> A = {
-        {2, -1, 0, 0},
-        {-1, 2, -1, 0},
-        {0, -1, 2, -1},
-        {0, 0, -1, 2}
-    };
-    vector<double> b = {1, 0, 0, 0};
 
-    // Utilisons la fonction pour calculer la solution des moindres carrés
-    try {
-        vector<double> x_chapeau = resoudre_equation_normale(A, b);
-        
-        // Affichons le résultat
-        cout << "La solution x_chapeau est:" << endl;
-        for (double val : x_chapeau) {
-            cout << val << " ";
-        }
-        cout << endl;
-    } catch (const std::exception& e) {
-        cerr << "Erreur: " << e.what() << endl;
-    }
-
-    return 0;
 }
