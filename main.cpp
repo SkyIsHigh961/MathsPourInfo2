@@ -141,6 +141,7 @@ vector<double> appliquer_matrice_vecteur(const vector<vector<double>>& mat, cons
     return result;
 }
 
+//******************************************************************************************************************************
 
 bool isValide(vector<vector<double>> matrice){
     for (vector<double> e: matrice){
@@ -152,9 +153,6 @@ bool isValide(vector<vector<double>> matrice){
     std::cout<< "matrice valide"<< std::endl;
     return 1;
 }
-
-
-
 
 //******************************************************************************************************************************
 int main(){
