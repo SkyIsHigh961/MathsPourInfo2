@@ -3,6 +3,8 @@
 #include <vector>   
 #include <cmath> //for additional math functions
 #include <stdexcept> //for std::invalid_argument 
+#include <fstream> //for file input/output
+#include <sstream> //for std::stringstream
 
 //******************************************************************************************************************************
 
@@ -264,6 +266,41 @@ vector<double> resoudre_equation_normale(const vector<vector<double>>& A, const 
     // return 0;
 
 //******************************************************************************************************************************
+
+void readHousingData(const string& filename, vector<vector<double>>& A, vector<double>& b) {
+    
+    ifstream file(filename);
+    if (!file.is_open()) {
+        throw runtime_error("Could not open file: " + filename);
+    }
+
+    string line;
+    while (getline(file, line)) {
+        stringstream ss(line);
+        vector<string> tokens;
+        string token;
+        
+        // Split the line by commas
+        while (getline(ss, token, ',')) {
+            tokens.push_back(token);
+        }
+
+        // Check for correct number of columns per line
+        if (tokens.size() >= 6) {
+            // Add a new row to matrix A with 1 (intercept) and surface area
+            vector<double> rowA = {1.0, stod(tokens[3])}; // tokens[3] is the surface area
+            A.push_back(rowA);
+            
+            // Add the corresponding price to vector b
+            b.push_back(stod(tokens[5])); // tokens[5] is the price
+        }
+    }
+
+    file.close();
+}
+
+//******************************************************************************************************************************
+
 int main(){
 
 
