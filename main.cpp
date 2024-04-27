@@ -178,29 +178,74 @@ vector<vector<double>> cholesky_decomposition(const vector<vector<double>>& A) {
     return B;
 }
 
+//******************************************************************************************************************************
+
+vector<double> substitution_avant(const vector<vector<double>>& L, const vector<double>& b) {
+    size_t n = L.size();
+    vector<double> y(n, 0.0);
+
+    for (size_t i = 0; i < n; ++i) {
+        y[i] = b[i];
+        for (size_t j = 0; j < i; ++j) {
+            y[i] -= L[i][j] * y[j];
+        }
+        y[i] /= L[i][i];
+    }
+
+    return y;
+}
+
+//******************************************************************************************************************************
+
+vector<double> substitution_arriere(const vector<vector<double>>& U, const vector<double>& y) {
+    size_t n = U.size();
+    vector<double> x(n, 0.0);
+
+    for (int i = n - 1; i >= 0; --i) {
+        x[i] = y[i];
+        for (size_t j = i + 1; j < n; ++j) {
+            x[i] -= U[i][j] * x[j];
+        }
+        x[i] /= U[i][i];
+    }
+
+    return x;
+}
+
+//******************************************************************************************************************************
+// Function to calculate the solution of the normal equation A^TAx = A^Tb
+vector<double> resoudre_equation_normale(const vector<vector<double>>& A, const vector<double>& b) {
+    vector<vector<double>> At = transpose_matrice(A); // At est la transposée de A
+    vector<vector<double>> AtA = produit_matrices(At, A); // AtA est le produit de At par A
+    vector<double> Atb = appliquer_matrice_vecteur(At, b); // Atb est le produit de At par b
+
+    vector<vector<double>> B = cholesky_decomposition(AtA); // B est la décomposition de Cholesky de AtA
+    vector<vector<double>> Bt = transpose_matrice(B); // Bt est la transposée de B
+
+    // Résoudre By = Atb pour y par substitution avant
+    vector<double> y = substitution_avant(B, Atb);
+    // Résoudre B^Tx = y pour x par substitution arrière
+    vector<double> x_chapeau = substitution_arriere(Bt, y);
+
+    return x_chapeau;
+}
 
 //******************************************************************************************************************************
 int main(){
 
-    vector<vector<double>> A = {
-        {25, 15, -5},
-        {15, 18, 0},
-        {-5, 0, 11}
-    };
+// Your matrix A and vector b should be defined here
+    // Example usage:
+    // vector<vector<double>> A = {{...}, {...}, ...};
+    // vector<double> b = {...};
 
-    try {
-        vector<vector<double>> B = cholesky_decomposition(A);
+    // Calculate the least squares solution
+    // vector<double> x_chapeau = resoudre_equation_normale(A, b);
 
-        cout << "Matrice B (resultat de la decomposition de Cholesky):" << endl;
-        for (const auto& row : B) {
-            for (double val : row) {
-                cout << val << " ";
-            }
-            cout << endl;
-        }
-    } catch (const std::exception& e) {
-        cerr << "Erreur: " << e.what() << endl;
-    }
+    // Output the result
+    // for (double val : x_chapeau) {
+    //     cout << val << " ";
+    // }
+    // cout << endl;
 
     return 0;
 }
