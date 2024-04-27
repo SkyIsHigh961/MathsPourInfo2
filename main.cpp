@@ -145,9 +145,12 @@ vector<double> appliquer_matrice_vecteur(const vector<vector<double>>& mat, cons
 bool isValide(vector<vector<double>> matrice){
     for (vector<double> e: matrice){
         if(matrice[0].size() != e.size()){
+            std::cout<< "matrice invalide"<< std::endl;
             return 0;
         }
-    }return 1;
+    }
+    std::cout<< "matrice valide"<< std::endl;
+    return 1;
 }
 
 
@@ -161,6 +164,11 @@ int main(){
         {4, 5, 6}
     };
 
+    vector<vector<double>> matrix2 = {
+        {1, 2, 3},
+        {4, 5, 6 , 5}
+    };
+
     vector<vector<double>> transposed = transpose_matrice(matrix);
 
     for (const auto& row : transposed) {
@@ -169,6 +177,9 @@ int main(){
         }
         cout << endl;
     }
+
+    std::cout<< isValide(matrix);
+    std::cout<< isValide(matrix2);
 
     return 0;
 }
