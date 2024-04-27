@@ -139,9 +139,12 @@ vector<double> appliquer_matrice_vecteur(const vector<vector<double>>& mat, cons
 bool isValide(vector<vector<double>> matrice){
     for (vector<double> e: matrice){
         if(matrice[0].size() != e.size()){
+            std::cout<< "matrice invalide"<< std::endl;
             return 0;
         }
-    }return 1;
+    }
+    std::cout<< "matrice valide"<< std::endl;
+    return 1;
 }
 
 //******************************************************************************************************************************
