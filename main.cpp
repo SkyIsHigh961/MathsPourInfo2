@@ -9,6 +9,10 @@ using namespace std;
 
 //******************************************************************************************************************************
 
+
+
+
+
 vector<double> addition(vector<double> v1, vector<double> v2){
 
     //variables
@@ -109,6 +113,10 @@ vector<vector<double>> produit_matrices(const vector<vector<double>>& mat1, cons
     return result;
 }
 
+
+
+
+
 //******************************************************************************************************************************
 
 vector<double> appliquer_matrice_vecteur(const vector<vector<double>>& mat, const vector<double>& vec) {
@@ -133,8 +141,21 @@ vector<double> appliquer_matrice_vecteur(const vector<vector<double>>& mat, cons
     return result;
 }
 
+
+bool isValide(vector<vector<double>> matrice){
+    for (vector<double> e: matrice){
+        if(matrice[0].size() != e.size()){
+            return 0;
+        }
+    }return 1;
+}
+
+
+
+
 //******************************************************************************************************************************
 int main(){
+
     vector<vector<double>> matrix = {
         {1, 2, 3},
         {4, 5, 6}
