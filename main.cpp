@@ -267,8 +267,8 @@ vector<double> resoudre_equation_normale(const vector<vector<double>>& A, const 
 
 //******************************************************************************************************************************
 
-void readHousingData(const string& filename, vector<vector<double>>& A, vector<double>& b) {
-    
+void readHousingData(const string& filename, vector<vector<double>>& A, vector<double>& b, bool includeArea = false,
+                    bool includeBedrooms = false, bool includeBathrooms = false, bool includeCondoStatus = false) {
     ifstream file(filename);
     if (!file.is_open()) {
         throw runtime_error("Could not open file: " + filename);
@@ -277,23 +277,33 @@ void readHousingData(const string& filename, vector<vector<double>>& A, vector<d
     string line;
     while (getline(file, line)) {
         stringstream ss(line);
-        vector<string> tokens;
         string token;
-        
-        // Split the line by commas
+        vector<string> tokens;
+
         while (getline(ss, token, ',')) {
             tokens.push_back(token);
         }
 
-        // Check for correct number of columns per line
-        if (tokens.size() >= 6) {
-            // Add a new row to matrix A with 1 (intercept) and surface area
-            vector<double> rowA = {1.0, stod(tokens[3])}; // tokens[3] is the surface area
-            A.push_back(rowA);
-            
-            // Add the corresponding price to vector b
-            b.push_back(stod(tokens[5])); // tokens[5] is the price
+        if (tokens.size() < 6) continue;  // Ensure there are enough columns
+
+        vector<double> rowA{1.0};  // Start with the intercept term
+
+        if (includeArea){
+            rowA.push_back(stod(tokens[3]));  // Include surface area (index 3)
+        }   
+
+        if (includeBedrooms) {
+            rowA.push_back(stod(tokens[1]));  // Include number of bedrooms (index 1)
         }
+        if (includeBathrooms) {
+            rowA.push_back(stod(tokens[2]));  // Include number of bathrooms (index 2)
+        }
+        if (includeCondoStatus) {
+            rowA.push_back(stod(tokens[4]));  // Include condo status (index 4, 0 or 1)
+        }
+
+        A.push_back(rowA);
+        b.push_back(stod(tokens[5]));  // Price is always included (index 5)
     }
 
     file.close();
@@ -355,5 +365,13 @@ double calculeSigmaChapeau(const vector<vector<double>>& A, const vector<double>
 
 int main(){
 
+    vector<vector<double>> A;
+    vector<double> b;
+    readHousingData("housing.data.txt", A, b, true, false, false, false);  
+    vector<double> theta = resoudre_equation_normale(A, b);
+    double sigmaHat = calculeSigmaChapeau(A, b, theta);
 
+    cout << "Sigma Chapeau: " << sigmaHat << endl;
+
+    return 0; 
 }
