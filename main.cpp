@@ -339,19 +339,21 @@ double calculeSigmaChapeau(const vector<vector<double>>& A, const vector<double>
     return std::sqrt(sommeDesCarresDesResidus / b.size());
 }
 
+    // vector<vector<double>> A;
+    // vector<double> b;
+    // string filename = "housing.data.txt"; // Ensure this path is correct
+
+    // readHousingData(filename, A, b);
+    // vector<double> theta = resoudre_equation_normale(A, b);
+    // double sigmaHat = calculeSigmaChapeau(A, b, theta);
+
+    // cout << "Sigma Chapeau: " << sigmaHat << endl;
+
+    // return 0; 
+
 //******************************************************************************************************************************
 
 int main(){
-    vector<vector<double>> A;
-    vector<double> b;
-    string filename = "housing.data.txt"; // Ensure this path is correct
 
-    readHousingData(filename, A, b);
-    vector<double> theta = resoudre_equation_normale(A, b);
-    double sigmaHat = calculeSigmaChapeau(A, b, theta);
-
-    cout << "Sigma Chapeau: " << sigmaHat << endl;
-
-    return 0; 
 
 }
