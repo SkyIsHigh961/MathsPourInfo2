@@ -302,6 +302,23 @@ void readHousingData(const string& filename, vector<vector<double>>& A, vector<d
 //******************************************************************************************************************************
 
 int main(){
+    
+    //variables
+    vector<vector<double>> A;
+    vector<double> b;
+    string filename = "housing.data.txt";
+
+    readHousingData(filename, A, b);
+
+    vector<double> x_chapeau = resoudre_equation_normale(A, b);
+
+        // Affichons le résultat
+        cout << "La solution x_chapeau est:" << endl;
+        for (double val : x_chapeau) {
+            cout << val << " ";
+        }
+        cout << endl;
 
 
+    return 0;
 }
