@@ -299,26 +299,59 @@ void readHousingData(const string& filename, vector<vector<double>>& A, vector<d
     file.close();
 }
 
+    //For testing exercice 2.3
+    //variables
+    // vector<vector<double>> A;
+    // vector<double> b;
+    // string filename = "housing.data.txt";
+
+    // readHousingData(filename, A, b);
+
+    // vector<double> x_chapeau = resoudre_equation_normale(A, b);
+
+    //     // Affichons le résultat
+    //     cout << "La solution x_chapeau est:" << endl;
+    //     for (double val : x_chapeau) {
+    //         cout << val << " ";
+    //     }
+    //     cout << endl;
+
+
+    // return 0;
+
+//******************************************************************************************************************************
+
+double calculeSigmaChapeau(const vector<vector<double>>& A, const vector<double>& b, const vector<double>& theta) {
+    vector<double> residus(b.size());
+    double sommeDesCarresDesResidus = 0.0;
+
+    // Calculer les valeurs prédites
+    for (size_t i = 0; i < A.size(); ++i) {
+        double predite = 0.0;
+        for (size_t j = 0; j < A[i].size(); ++j) {
+            predite += A[i][j] * theta[j];
+        }
+        residus[i] = b[i] - predite;
+        sommeDesCarresDesResidus += std::pow(residus[i], 2);
+    }
+
+    // Calculer sigma chapeau
+    return std::sqrt(sommeDesCarresDesResidus / b.size());
+}
+
 //******************************************************************************************************************************
 
 int main(){
-    
-    //variables
     vector<vector<double>> A;
     vector<double> b;
-    string filename = "housing.data.txt";
+    string filename = "housing.data.txt"; // Ensure this path is correct
 
     readHousingData(filename, A, b);
+    vector<double> theta = resoudre_equation_normale(A, b);
+    double sigmaHat = calculeSigmaChapeau(A, b, theta);
 
-    vector<double> x_chapeau = resoudre_equation_normale(A, b);
+    cout << "Sigma Chapeau: " << sigmaHat << endl;
 
-        // Affichons le résultat
-        cout << "La solution x_chapeau est:" << endl;
-        for (double val : x_chapeau) {
-            cout << val << " ";
-        }
-        cout << endl;
+    return 0; 
 
-
-    return 0;
 }
