@@ -415,48 +415,60 @@ void createPolynomialRegressionMatrix(vector<vector<double>>& data, int degree, 
 }
 
 
+void readpolyData(const string& filename, vector<vector<double>>& A, vector<double>& b) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        throw runtime_error("Could not open file: " + filename);
+    }
+
+    string line;
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string token;
+        vector<double> rowA;  // Create a vector for the current row of matrix A
+        double value;  // Variable to store the parsed double value from tokens
+
+        // Read each token separated by comma
+        while (getline(ss, token, ',')) {
+            // Convert the token to double
+            value = stod(token);
+            // Add the value to the row of matrix A
+            rowA.push_back(value);
+        }
+
+        // Check if the row contains at least three values (including the intercept term)
+        if (rowA.size() < 3) {
+            throw runtime_error("Insufficient columns in the data file.");
+        }
+
+        // Add the row to matrix A
+        A.push_back(rowA);
+
+        // Add the value from the third column to vector b
+        b.push_back(rowA.back());
+    }
+
+    file.close();
+}
 
 
 
 
 int main(){
-
-    // Example usage:
-    // Suppose data is a vector of vectors, each containing [x1, x2, ..., xn, y]
-    // For example, data for a model with 2 predictors might look like this:
-
     
     vector<vector<double>> A;
     vector<vector<double>> newA;
     vector<double> b;
-
-    int polynomialDegree = 4;  // Polynomial degree
-    readHousingData("housing.data.txt", A, b, true, false, false, false, -1);  
+    int polynomialDegree=13;
+    //readHousingData("housing.data.txt", A, b, true, false, false, false, -1);  
+    readpolyData("polynomial.data.txt",A,b);
+    
     createPolynomialRegressionMatrix(A, polynomialDegree, newA);
 
-    // Print matrix A and vector b
-    cout << "Matrix newA:" << endl;
-    for (const auto& row : newA) {
-        for (auto elem : row) cout << elem << " ";
-        cout << endl;
-    }
+    vector<double> theta = resoudre_equation_normale(newA, b);
+    double sigmaHat = calculeSigmaChapeau(newA, b, theta);
 
-    cout << "Vector b:" << endl;
-    for (auto elem : b) cout << elem << " ";
-    cout << endl;
-
-    return 0;
-
+    cout <<"pour d= "<<polynomialDegree<< " Sigma Chapeau:  " << sigmaHat << endl;
+    
+    
 }
-
-    // vector<vector<double>> A;
-    // vector<double> b;
-    // readHousingData("housing.data.txt", A, b, true, true, true, false, 0);  
-    // vector<double> theta = resoudre_equation_normale(A, b);
-    // double sigmaHat = calculeSigmaChapeau(A, b, theta);
-
-    // cout << "Sigma Chapeau: " << sigmaHat << endl;
-
-    // writeMatrixToFile(A, "outputMatrix.txt");  // Specify the output filename
-
-    // return 0; 
