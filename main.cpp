@@ -391,18 +391,74 @@ void writeMatrixToFile(const vector<vector<double>>& matrix, const string& filen
     cout << "Matrix written to " << filename << endl;
 }
 
-//******************************************************************************************************************************
+//******************************************************************************************************************************\
+
+// Function to generate polynomial terms for a vector of variables
+void generatePolynomialTerms(const vector<double>& vars, int degree, vector<double>& row) {
+    row.push_back(1.0);  // Add intercept term
+    for (int i = 1; i <= degree; ++i) {
+        for (double var : vars) {
+            row.push_back(pow(var, i));  // Add variable raised to the power 'i'
+        }
+    }
+}
+
+// Main function to read data and create the matrix A and vector b
+void createPolynomialRegressionMatrix(vector<vector<double>>& data, int degree, vector<vector<double>>& A, vector<double>& b) {
+    for (const auto& row : data) {
+        vector<double> A_row;
+        vector<double> vars(row.begin(), row.end() - 1);  // Extract all variables (assuming last column is the dependent variable)
+        generatePolynomialTerms(vars, degree, A_row);
+        A.push_back(A_row);
+        b.push_back(row.back());  // Last element is the dependent variable
+    }
+}
+
+
+
+
+
+
 int main(){
+
+    // Example usage:
+    // Suppose data is a vector of vectors, each containing [x1, x2, ..., xn, y]
+    // For example, data for a model with 2 predictors might look like this:
+    vector<vector<double>> data = {
+        {1.0, 2.0, 10.0},
+        {1.5, 3.5, 15.0},
+        {2.0, 4.0, 20.0}
+    };
 
     vector<vector<double>> A;
     vector<double> b;
-    readHousingData("housing.data.txt", A, b, true, true, true, false, 0);  
-    vector<double> theta = resoudre_equation_normale(A, b);
-    double sigmaHat = calculeSigmaChapeau(A, b, theta);
+    int polynomialDegree = 4;  // Polynomial degree
 
-    cout << "Sigma Chapeau: " << sigmaHat << endl;
+    createPolynomialRegressionMatrix(data, polynomialDegree, A, b);
 
-    writeMatrixToFile(A, "outputMatrix.txt");  // Specify the output filename
+    // Print matrix A and vector b
+    cout << "Matrix A:" << endl;
+    for (const auto& row : A) {
+        for (auto elem : row) cout << elem << " ";
+        cout << endl;
+    }
 
-    return 0; 
+    cout << "Vector b:" << endl;
+    for (auto elem : b) cout << elem << " ";
+    cout << endl;
+
+    return 0;
+
 }
+
+    // vector<vector<double>> A;
+    // vector<double> b;
+    // readHousingData("housing.data.txt", A, b, true, true, true, false, 0);  
+    // vector<double> theta = resoudre_equation_normale(A, b);
+    // double sigmaHat = calculeSigmaChapeau(A, b, theta);
+
+    // cout << "Sigma Chapeau: " << sigmaHat << endl;
+
+    // writeMatrixToFile(A, "outputMatrix.txt");  // Specify the output filename
+
+    // return 0; 
