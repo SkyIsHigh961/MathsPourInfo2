@@ -267,8 +267,10 @@ vector<double> resoudre_equation_normale(const vector<vector<double>>& A, const 
 
 //******************************************************************************************************************************
 
-void readHousingData(const string& filename, vector<vector<double>>& A, vector<double>& b, bool includeArea = false,
-                    bool includeBedrooms = false, bool includeBathrooms = false, bool includeCondoStatus = false) {
+void readHousingData(const string& filename, vector<vector<double>>& A, vector<double>& b,
+                      bool includeArea = false, bool includeBedrooms = false,
+                      bool includeBathrooms = false, bool includeCondoStatus = false,
+                      int propertyTypeFilter = -1) {
     ifstream file(filename);
     if (!file.is_open()) {
         throw runtime_error("Could not open file: " + filename);
@@ -286,18 +288,24 @@ void readHousingData(const string& filename, vector<vector<double>>& A, vector<d
 
         if (tokens.size() < 6) continue;  // Ensure there are enough columns
 
+        // Property type check
+        int propertyType = stoi(tokens[4]);  // Index 4 for property type (-1 = aucun, 0 = maison individuelles, 1 = copropriétés)
+        if (propertyTypeFilter != -1 && propertyType != propertyTypeFilter) continue;
+
         vector<double> rowA{1.0};  // Start with the intercept term
 
-        if (includeArea){
+        if (includeArea) {
             rowA.push_back(stod(tokens[3]));  // Include surface area (index 3)
-        }   
+        }
 
         if (includeBedrooms) {
             rowA.push_back(stod(tokens[1]));  // Include number of bedrooms (index 1)
         }
+
         if (includeBathrooms) {
             rowA.push_back(stod(tokens[2]));  // Include number of bathrooms (index 2)
         }
+
         if (includeCondoStatus) {
             rowA.push_back(stod(tokens[4]));  // Include condo status (index 4, 0 or 1)
         }
@@ -367,7 +375,7 @@ int main(){
 
     vector<vector<double>> A;
     vector<double> b;
-    readHousingData("housing.data.txt", A, b, true, false, false, false);  
+    readHousingData("housing.data.txt", A, b, true, false, false, false, 1);  
     vector<double> theta = resoudre_equation_normale(A, b);
     double sigmaHat = calculeSigmaChapeau(A, b, theta);
 
