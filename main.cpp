@@ -404,13 +404,13 @@ void generatePolynomialTerms(const vector<double>& vars, int degree, vector<doub
 }
 
 // Main function to read data and create the matrix A and vector b
-void createPolynomialRegressionMatrix(vector<vector<double>>& data, int degree, vector<vector<double>>& A, vector<double>& b) {
+void createPolynomialRegressionMatrix(vector<vector<double>>& data, int degree, vector<vector<double>>& A) {
     for (const auto& row : data) {
         vector<double> A_row;
         vector<double> vars(row.begin(), row.end() - 1);  // Extract all variables (assuming last column is the dependent variable)
         generatePolynomialTerms(vars, degree, A_row);
         A.push_back(A_row);
-        b.push_back(row.back());  // Last element is the dependent variable
+        //b.push_back(row.back());  // Last element is the dependent variable
     }
 }
 
@@ -424,21 +424,19 @@ int main(){
     // Example usage:
     // Suppose data is a vector of vectors, each containing [x1, x2, ..., xn, y]
     // For example, data for a model with 2 predictors might look like this:
-    vector<vector<double>> data = {
-        {1.0, 2.0, 10.0},
-        {1.5, 3.5, 15.0},
-        {2.0, 4.0, 20.0}
-    };
 
+    
     vector<vector<double>> A;
+    vector<vector<double>> newA;
     vector<double> b;
-    int polynomialDegree = 4;  // Polynomial degree
 
-    createPolynomialRegressionMatrix(data, polynomialDegree, A, b);
+    int polynomialDegree = 4;  // Polynomial degree
+    readHousingData("housing.data.txt", A, b, true, false, false, false, -1);  
+    createPolynomialRegressionMatrix(A, polynomialDegree, newA);
 
     // Print matrix A and vector b
-    cout << "Matrix A:" << endl;
-    for (const auto& row : A) {
+    cout << "Matrix newA:" << endl;
+    for (const auto& row : newA) {
         for (auto elem : row) cout << elem << " ";
         cout << endl;
     }
