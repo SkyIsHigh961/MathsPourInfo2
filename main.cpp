@@ -370,16 +370,39 @@ double calculeSigmaChapeau(const vector<vector<double>>& A, const vector<double>
     // return 0; 
 
 //******************************************************************************************************************************
+// For debug purposes
+void writeMatrixToFile(const vector<vector<double>>& matrix, const string& filename) {
+    ofstream outFile(filename);  // Create an ofstream to write to the file
+    if (!outFile.is_open()) {
+        cerr << "Failed to open file: " << filename << endl;
+        return;
+    }
 
+    // Loop through each row of the matrix
+    for (const auto& row : matrix) {
+        for (size_t i = 0; i < row.size(); i++) {
+            outFile << row[i];  // Write each element to the file
+            if (i != row.size() - 1) outFile << ", ";  // Separate elements with a comma
+        }
+        outFile << "\n";  // Start a new line after each row
+    }
+
+    outFile.close();  // Close the file after writing
+    cout << "Matrix written to " << filename << endl;
+}
+
+//******************************************************************************************************************************
 int main(){
 
     vector<vector<double>> A;
     vector<double> b;
-    readHousingData("housing.data.txt", A, b, true, false, false, false, 1);  
+    readHousingData("housing.data.txt", A, b, true, true, true, false, 0);  
     vector<double> theta = resoudre_equation_normale(A, b);
     double sigmaHat = calculeSigmaChapeau(A, b, theta);
 
     cout << "Sigma Chapeau: " << sigmaHat << endl;
+
+    writeMatrixToFile(A, "outputMatrix.txt");  // Specify the output filename
 
     return 0; 
 }
