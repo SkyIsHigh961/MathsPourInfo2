@@ -531,8 +531,12 @@ int main(){
     vector<vector<long double>> A;
     vector<vector<long double>> newA;
     vector<long double> b;
-    int polynomialDegree=15;
+    
+    vector<vector<long double>> A20;
+    vector<vector<long double>> newA20;
+    vector<long double> b20;
 
+int polynomialDegree=15;
 
     readpolyData("file80.txt",A,b);
 
@@ -540,6 +544,14 @@ int main(){
     vector<long double> theta = resoudre_equation_normale(newA, b);
     long double sigmaHat = calculeSigmaChapeau(newA, b, theta);
     cout <<"pour d= "<< polynomialDegree << " Sigma Chapeau:  " << sigmaHat << endl;
+    
+    
+    readpolyData("file20.txt",A20,b20);
+
+    createPolynomialRegressionMatrix(A20, polynomialDegree, newA20);
+    long double sigmaHat20 = calculeSigmaChapeau(newA20, b20, theta);
+    cout <<"pour d= "<< polynomialDegree << " Sigma Chapeau20:  " << sigmaHat20 << endl;
+     
      
 }
 
