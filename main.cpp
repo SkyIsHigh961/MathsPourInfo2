@@ -521,26 +521,28 @@ void processAndSplitData(const string& inputFilename, const string& outputTrainF
 
 int main(){
     
-    try {
-        processAndSplitData("polynomial.data.txt", "file80.txt", "file20.txt");
-        cout << "Data has been successfully processed, split, and saved." << endl;
-    } catch (const exception& e) {
-        cerr << "Error: " << e.what() << endl;
-    }
-    return 0;
+    // try {
+    //     processAndSplitData("polynomial.data.txt", "file80.txt", "file20.txt");
+    //     cout << "Data has been successfully processed, split, and saved." << endl;
+    // } catch (const exception& e) {
+    //     cerr << "Error: " << e.what() << endl;
+    // }
+    
+    vector<vector<long double>> A;
+    vector<vector<long double>> newA;
+    vector<long double> b;
+    int polynomialDegree=14;
+
+
+    readpolyData("file80.txt",A,b);
+
+    createPolynomialRegressionMatrix(A, polynomialDegree, newA);
+    vector<long double> theta = resoudre_equation_normale(newA, b);
+    long double sigmaHat = calculeSigmaChapeau(newA, b, theta);
+    cout <<"pour d= "<< polynomialDegree << " Sigma Chapeau:  " << sigmaHat << endl;
+     
 }
 
 
-    // vector<vector<long double>> A;
-    // vector<vector<long double>> newA;
-    // vector<long double> b;
-    // int polynomialDegree=3;
-    // //readHousingData("housing.data.txt", A, b, true, false, false, false, -1);  
-    // readpolyData("polynomial.data.txt",A,b);
-    
-    // createPolynomialRegressionMatrix(A, polynomialDegree, newA);
 
-    // vector<long double> theta = resoudre_equation_normale(newA, b);
-    // long double sigmaHat = calculeSigmaChapeau(newA, b, theta);
-
-    // cout <<"pour d= "<<polynomialDegree<< " Sigma Chapeau:  " << sigmaHat << endl;
+  
