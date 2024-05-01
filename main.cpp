@@ -531,7 +531,7 @@ int main(){
     vector<vector<long double>> A;
     vector<vector<long double>> newA;
     vector<long double> b;
-    int polynomialDegree=14;
+    int polynomialDegree=15;
 
 
     readpolyData("file80.txt",A,b);
