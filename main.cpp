@@ -5,6 +5,10 @@
 #include <stdexcept> //for std::invalid_argument 
 #include <fstream> //for file input/output
 #include <sstream> //for std::stringstream
+#include <numeric>  // For std::iota
+#include <algorithm>  // For std::shuffle
+#include <random>  // For std::default_random_engine
+#include <chrono>  // For std::chrono::system_clock
 
 //******************************************************************************************************************************
 
@@ -451,24 +455,92 @@ void readpolyData(const string& filename, vector<vector<long double>>& A, vector
     file.close();
 }
 
+//******************************************************************************************************************************
 
+// Single function to read data, split it, and write to two files
+void processAndSplitData(const string& inputFilename, const string& outputTrainFilename, const string& outputTestFilename, double trainSplitRatio = 0.8) {
+    ifstream inputFile(inputFilename);
+    vector<vector<double>> data;
+    string line;
 
+    // Read data from file
+    if (!inputFile.is_open()) {
+        throw runtime_error("Could not open file: " + inputFilename);
+    }
+    while (getline(inputFile, line)) {
+        stringstream ss(line);
+        string token;
+        vector<double> row;
+        while (getline(ss, token, ',')) {
+            row.push_back(stod(token));
+        }
+        data.push_back(row);
+    }
+    inputFile.close();
+
+    // Shuffle data
+    random_device rd;
+    mt19937 g(rd());
+    shuffle(data.begin(), data.end(), g);
+
+    // Split data
+    size_t splitIndex = static_cast<size_t>(trainSplitRatio * data.size());
+    vector<vector<double>> trainData(data.begin(), data.begin() + splitIndex);
+    vector<vector<double>> testData(data.begin() + splitIndex, data.end());
+
+    // Write training data
+    ofstream trainFile(outputTrainFilename);
+    if (!trainFile.is_open()) {
+        throw runtime_error("Could not open file: " + outputTrainFilename);
+    }
+    for (const auto& row : trainData) {
+        for (size_t i = 0; i < row.size(); ++i) {
+            trainFile << row[i];
+            if (i != row.size() - 1) trainFile << ", ";
+        }
+        trainFile << "\n";
+    }
+    trainFile.close();
+
+    // Write testing data
+    ofstream testFile(outputTestFilename);
+    if (!testFile.is_open()) {
+        throw runtime_error("Could not open file: " + outputTestFilename);
+    }
+    for (const auto& row : testData) {
+        for (size_t i = 0; i < row.size(); ++i) {
+            testFile << row[i];
+            if (i != row.size() - 1) testFile << ", ";
+        }
+        testFile << "\n";
+    }
+    testFile.close();
+}
+
+//******************************************************************************************************************************
 
 int main(){
     
-    vector<vector<long double>> A;
-    vector<vector<long double>> newA;
-    vector<long double> b;
-    int polynomialDegree=3;
-    //readHousingData("housing.data.txt", A, b, true, false, false, false, -1);  
-    readpolyData("polynomial.data.txt",A,b);
-    
-    createPolynomialRegressionMatrix(A, polynomialDegree, newA);
-
-    vector<long double> theta = resoudre_equation_normale(newA, b);
-    long double sigmaHat = calculeSigmaChapeau(newA, b, theta);
-
-    cout <<"pour d= "<<polynomialDegree<< " Sigma Chapeau:  " << sigmaHat << endl;
-    
-    
+    try {
+        processAndSplitData("polynomial.data.txt", "file80.txt", "file20.txt");
+        cout << "Data has been successfully processed, split, and saved." << endl;
+    } catch (const exception& e) {
+        cerr << "Error: " << e.what() << endl;
+    }
+    return 0;
 }
+
+
+    // vector<vector<long double>> A;
+    // vector<vector<long double>> newA;
+    // vector<long double> b;
+    // int polynomialDegree=3;
+    // //readHousingData("housing.data.txt", A, b, true, false, false, false, -1);  
+    // readpolyData("polynomial.data.txt",A,b);
+    
+    // createPolynomialRegressionMatrix(A, polynomialDegree, newA);
+
+    // vector<long double> theta = resoudre_equation_normale(newA, b);
+    // long double sigmaHat = calculeSigmaChapeau(newA, b, theta);
+
+    // cout <<"pour d= "<<polynomialDegree<< " Sigma Chapeau:  " << sigmaHat << endl;

@@ -1,3 +1,5 @@
 *.exe
 .vscode
 outputMatrix.txt
+file80.txt
+file20.txt
